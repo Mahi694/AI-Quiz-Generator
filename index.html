@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Quiz Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI-Powered Quiz Application</h1>
+        </header>
+
+        <!-- Quiz Setup Section -->
+        <section id="quiz-setup" class="section">
+            <h2>Quiz Setup</h2>
+            <form id="setup-form">
+                <div class="form-group">
+                    <label for="topic">Enter the topic for your quiz:</label>
+                    <input type="text" id="topic" name="topic" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Enter the difficulty level (1-5):</label>
+                    <div class="difficulty-options">
+                        <div class="radio-option">
+                            <input type="radio" id="diff-1" name="difficulty" value="1" required>
+                            <label for="diff-1">1 - Basic</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="diff-2" name="difficulty" value="2">
+                            <label for="diff-2">2 - Intermediate</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="diff-3" name="difficulty" value="3">
+                            <label for="diff-3">3 - Just Above Medium</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="diff-4" name="difficulty" value="4">
+                            <label for="diff-4">4 - Advanced</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="diff-5" name="difficulty" value="5">
+                            <label for="diff-5">5 - Expert</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="num-questions">How many questions do you want?</label>
+                    <input type="number" id="num-questions" name="numQuestions" min="1" max="20" value="5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time-limit">Enter the time limit (in minutes):</label>
+                    <input type="number" id="time-limit" name="timeLimit" min="1" max="60" step="0.5" value="5" required>
+                </div>
+
+                <button type="submit" id="start-quiz" class="btn">Start Quiz</button>
+            </form>
+        </section>
+
+        <!-- Loading Section -->
+        <section id="loading-section" class="section hidden">
+            <h2>Preparing Your Quiz</h2>
+            <div class="loading-spinner"></div>
+            <p id="loading-message">Fetching questions for your topic...</p>
+        </section>
+
+        <!-- Quiz Questions Section -->
+        <section id="quiz-questions" class="section hidden">
+            <div class="quiz-header">
+                <h2>Quiz in Progress</h2>
+                <div class="quiz-info">
+                    <div id="question-counter">Question <span id="current-question">1</span> of <span id="total-questions">5</span></div>
+                    <div id="timer">Time Remaining: <span id="time-display">5:00</span></div>
+                </div>
+            </div>
+
+            <div id="question-container">
+                <h3 id="question-text">Question text will appear here</h3>
+                <div class="options-container">
+                    <div class="option" data-option="A">
+                        <span class="option-letter">A</span>
+                        <span class="option-text">Option A text</span>
+                    </div>
+                    <div class="option" data-option="B">
+                        <span class="option-letter">B</span>
+                        <span class="option-text">Option B text</span>
+                    </div>
+                    <div class="option" data-option="C">
+                        <span class="option-letter">C</span>
+                        <span class="option-text">Option C text</span>
+                    </div>
+                    <div class="option" data-option="D">
+                        <span class="option-letter">D</span>
+                        <span class="option-text">Option D text</span>
+                    </div>
+                </div>
+
+                <div class="hint-container">
+                    <button id="hint-button" class="btn btn-secondary">Get a Hint</button>
+                    <div id="hint-text" class="hidden"></div>
+                </div>
+
+                <div id="answer-feedback" class="hidden">
+                    <div id="feedback-message"></div>
+                </div>
+
+                <button id="next-question" class="btn hidden">Next Question</button>
+            </div>
+        </section>
+
+        <!-- Quiz Results Section -->
+        <section id="quiz-results" class="section hidden">
+            <h2>Quiz Complete!</h2>
+
+            <div class="results-summary">
+                <div class="score-container">
+                    <h3>Your Score</h3>
+                    <div class="score">
+                        <span id="correct-count">0</span>/<span id="total-count">0</span>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <h3>Quiz Statistics</h3>
+                    <ul class="stats-list">
+                        <li>Average Time per Question: <span id="avg-time">0</span> seconds</li>
+                        <li>Fastest Answer: <span id="min-time">0</span> seconds</li>
+                        <li>Slowest Answer: <span id="max-time">0</span> seconds</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="retry-options">
+                <h3>Retry Options</h3>
+                <button id="retry-incorrect" class="btn">Retry Incorrect Questions</button>
+                <button id="view-report" class="btn btn-secondary">View Detailed Report</button>
+                <button id="new-quiz" class="btn btn-outline">Start New Quiz</button>
+            </div>
+        </section>
+
+        <!-- Detailed Report Section -->
+        <section id="detailed-report" class="section hidden">
+            <h2>Detailed Report</h2>
+            <div id="report-container">
+                <!-- Detailed questions and answers will be generated here -->
+            </div>
+            <button id="back-to-results" class="btn">Back to Results</button>
+        </section>
+
+        <!-- Retry Section -->
+        <section id="retry-section" class="section hidden">
+            <div class="quiz-header">
+                <h2>Retry Question</h2>
+            </div>
+
+            <div id="retry-container">
+                <h3 id="retry-question-text">Question text will appear here</h3>
+                <div class="options-container" id="retry-options">
+                    <!-- Options will be dynamically generated -->
+                </div>
+
+                <div class="hint-container">
+                    <div id="improved-hint" class="improved-hint"></div>
+                </div>
+
+                <div id="retry-answer-feedback" class="hidden">
+                    <div id="retry-feedback-message"></div>
+                </div>
+
+                <button id="next-retry" class="btn hidden">Next Question</button>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>AI-Powered Quiz Application</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
